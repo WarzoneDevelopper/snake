@@ -27,8 +27,8 @@ class Snake:
 
 class Food:
     def __init__(self):
-        x = random.randint(0, (GAME_WIDTH/SPACE_SIZE)-1) * SPACE_SIZE
-        y = random.randint(0, (GAME_HEIGHT/SPACE_SIZE)-1) * SPACE_SIZE
+        x = random.randint(0, int(GAME_WIDTH/SPACE_SIZE)-1) * SPACE_SIZE
+        y = random.randint(0, int(GAME_HEIGHT/SPACE_SIZE)-1) * SPACE_SIZE
 
         self.coordinates = [x, y]
 
@@ -139,4 +139,3 @@ window.bind('<Down>', lambda event: change_direction('down'))
 next_turn(snake, food)
 
 window.mainloop()
-
