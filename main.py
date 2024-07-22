@@ -13,6 +13,7 @@ TEXT_COLOR = "#FFFFFF"
 MENU_BACKGROUND = "#333333"
 BUTTON_COLOR = "#444444"
 BUTTON_TEXT_COLOR = "#FFFFFF"
+BUTTON_HOVER_COLOR = "#555555"
 
 class Snake:
     def __init__(self):
@@ -42,7 +43,7 @@ def start_game():
     direction = 'down'
     
     canvas.delete(tk.ALL)
-    label.config(text="Score:{}".format(score))
+    label.config(text="Score: {}".format(score))
     
     snake = Snake()
     food = Food()
@@ -70,7 +71,7 @@ def next_turn(snake, food):
     if x == food.coordinates[0] and y == food.coordinates[1]:
         global score
         score += 1
-        label.config(text="Score:{}".format(score))
+        label.config(text="Score: {}".format(score))
         canvas.delete("food")
         food = Food()
     else:
@@ -125,7 +126,7 @@ def show_settings():
 def save_settings():
     global SPEED
     speed_value = speed_var.get()
-    SPEED = int(500 / speed_value)  # Example: SPEED=100 for speed_value=5
+    SPEED = int(500 / speed_value)
     show_menu()
 
 def start_button_click():
@@ -139,6 +140,12 @@ def show_rules():
     canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2, font=('consolas', 20), text="Use arrow keys to move the snake.\nEat food to grow.\nDon't collide with walls or yourself!", fill=TEXT_COLOR, tag="rules")
     window.after(5000, show_menu)
 
+def on_enter(e):
+    e.widget['background'] = BUTTON_HOVER_COLOR
+
+def on_leave(e):
+    e.widget['background'] = BUTTON_COLOR
+
 window = tk.Tk()
 window.title("Snake")
 window.resizable(False, False)
@@ -147,7 +154,7 @@ score = 0
 direction = 'down'
 SPEED = 100
 
-label = tk.Label(window, text="Score:{}".format(score), font=('consolas', 40), fg=TEXT_COLOR, bg=BACKGROUND_COLOR)
+label = tk.Label(window, text="Score: {}".format(score), font=('consolas', 40), fg=TEXT_COLOR, bg=BACKGROUND_COLOR)
 
 canvas = tk.Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 
@@ -157,15 +164,23 @@ menu_title.pack(pady=20)
 
 start_button = tk.Button(menu_frame, text="Start Game", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=start_button_click)
 start_button.pack(pady=10)
+start_button.bind("<Enter>", on_enter)
+start_button.bind("<Leave>", on_leave)
 
 rules_button = tk.Button(menu_frame, text="Rules", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=show_rules)
 rules_button.pack(pady=10)
+rules_button.bind("<Enter>", on_enter)
+rules_button.bind("<Leave>", on_leave)
 
 settings_button = tk.Button(menu_frame, text="Settings", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=show_settings)
 settings_button.pack(pady=10)
+settings_button.bind("<Enter>", on_enter)
+settings_button.bind("<Leave>", on_leave)
 
 exit_button = tk.Button(menu_frame, text="Exit", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=window.quit)
 exit_button.pack(pady=10)
+exit_button.bind("<Enter>", on_enter)
+exit_button.bind("<Leave>", on_leave)
 
 settings_frame = tk.Frame(window, bg=MENU_BACKGROUND)
 settings_title = tk.Label(settings_frame, text="Settings", font=('consolas', 50), fg=TEXT_COLOR, bg=MENU_BACKGROUND)
@@ -179,6 +194,8 @@ speed_scale.pack(pady=10)
 
 save_button = tk.Button(settings_frame, text="Save", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=save_settings)
 save_button.pack(pady=10)
+save_button.bind("<Enter>", on_enter)
+save_button.bind("<Leave>", on_leave)
 
 menu_frame.pack(fill='both', expand=True)
 
