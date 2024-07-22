@@ -4,7 +4,7 @@
 setlocal enabledelayedexpansion
 
 REM --- Configuration ---
-set REPO_URL=https://github.com/WarzoneDevelopper/snake/edit/main/
+set REPO_URL=https://raw.githubusercontent.com/WarzoneDevelopper/snake/main/main.py
 set LOCAL_VERSION_FILE=version.txt
 set REMOTE_VERSION_FILE=%REPO_URL%/version.txt
 set MAIN_FILE=main.py
