@@ -4,7 +4,6 @@ import random
 # Configurations
 GAME_WIDTH = 700
 GAME_HEIGHT = 500
-SPEED = 100
 SPACE_SIZE = 20
 BODY_PARTS = 3
 SNAKE_COLOR = "#00FF00"
@@ -38,7 +37,7 @@ class Food:
         canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tag="food")
 
 def start_game():
-    global score, direction, snake, food
+    global score, direction, snake, food, SPEED
     score = 0
     direction = 'down'
     
@@ -114,14 +113,25 @@ def game_over():
     window.after(5000, show_menu)
 
 def show_menu():
-    canvas.delete(tk.ALL)
+    canvas.pack_forget()
     label.pack_forget()
-
+    settings_frame.pack_forget()
     menu_frame.pack(fill='both', expand=True)
+
+def show_settings():
+    menu_frame.pack_forget()
+    settings_frame.pack(fill='both', expand=True)
+
+def save_settings():
+    global SPEED
+    speed_value = speed_var.get()
+    SPEED = int(500 / speed_value)  # Example: SPEED=100 for speed_value=5
+    show_menu()
 
 def start_button_click():
     menu_frame.pack_forget()
     label.pack()
+    canvas.pack()
     start_game()
 
 def show_rules():
@@ -135,11 +145,11 @@ window.resizable(False, False)
 
 score = 0
 direction = 'down'
+SPEED = 100
 
 label = tk.Label(window, text="Score:{}".format(score), font=('consolas', 40), fg=TEXT_COLOR, bg=BACKGROUND_COLOR)
 
 canvas = tk.Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
-canvas.pack()
 
 menu_frame = tk.Frame(window, bg=MENU_BACKGROUND)
 menu_title = tk.Label(menu_frame, text="Snake Game", font=('consolas', 50), fg=TEXT_COLOR, bg=MENU_BACKGROUND)
@@ -151,8 +161,24 @@ start_button.pack(pady=10)
 rules_button = tk.Button(menu_frame, text="Rules", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=show_rules)
 rules_button.pack(pady=10)
 
+settings_button = tk.Button(menu_frame, text="Settings", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=show_settings)
+settings_button.pack(pady=10)
+
 exit_button = tk.Button(menu_frame, text="Exit", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=window.quit)
 exit_button.pack(pady=10)
+
+settings_frame = tk.Frame(window, bg=MENU_BACKGROUND)
+settings_title = tk.Label(settings_frame, text="Settings", font=('consolas', 50), fg=TEXT_COLOR, bg=MENU_BACKGROUND)
+settings_title.pack(pady=20)
+
+speed_label = tk.Label(settings_frame, text="Speed:", font=('consolas', 20), fg=TEXT_COLOR, bg=MENU_BACKGROUND)
+speed_label.pack(pady=10)
+speed_var = tk.IntVar(value=5)
+speed_scale = tk.Scale(settings_frame, from_=1, to=10, orient='horizontal', variable=speed_var, font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, troughcolor=TEXT_COLOR)
+speed_scale.pack(pady=10)
+
+save_button = tk.Button(settings_frame, text="Save", font=('consolas', 20), bg=BUTTON_COLOR, fg=BUTTON_TEXT_COLOR, command=save_settings)
+save_button.pack(pady=10)
 
 menu_frame.pack(fill='both', expand=True)
 
